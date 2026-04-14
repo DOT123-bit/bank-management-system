@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - Bank Management System</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="page">
+        <header class="hero">
+            <div>
+                <p class="tag">Transaction History</p>
+                <h1>All Transactions</h1>
+                <p class="subtitle">View all account activities in one place.</p>
+            </div>
+            <div class="hero-actions">
+                <a class="nav-btn" href="/dashboard">Dashboard</a>
+                <a class="nav-btn light" href="/bank">Manage Accounts</a>
+                <a class="nav-btn danger" href="/logout">Logout</a>
+            </div>
+        </header>
+
+        <section class="card table-card">
+            <% if (transactions.length === 0) { %>
+                <div class="empty-box">
+                    <p>No transactions found.</p>
+                </div>
+            <% } else { %>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Account Number</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% transactions.forEach(t => { %>
+                                <tr>
+                                    <td><%= t.id %></td>
+                                    <td><%= t.accountNumber %></td>
+                                    <td><%= t.type %></td>
+                                    <td>₹ <%= t.amount %></td>
+                                    <td><%= t.createdAt %></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } %>
+        </section>
+    </div>
+</body>
+</html>

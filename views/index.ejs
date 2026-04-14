@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Bank Management System</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="page">
+        <header class="hero">
+            <div>
+                <p class="tag">Dashboard</p>
+                <h1>Welcome, <%= username %></h1>
+                <p class="subtitle">Manage your bank records, transactions, deposits, withdrawals, and accounts from one place.</p>
+            </div>
+            <div class="hero-actions">
+                <a class="nav-btn" href="/bank">Manage Accounts</a>
+                <a class="nav-btn light" href="/transactions">View Transactions</a>
+                <a class="nav-btn danger" href="/logout">Logout</a>
+            </div>
+        </header>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Accounts</h3>
+                <p><%= totalAccounts %></p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Balance</h3>
+                <p>₹ <%= totalBalance %></p>
+            </div>
+        </section>
+
+        <section class="card table-card">
+            <div class="section-title-row">
+                <h2>Recent Transactions</h2>
+                <a class="show-all-btn" href="/transactions">View All</a>
+            </div>
+
+            <% if (recentTransactions.length === 0) { %>
+                <div class="empty-box">
+                    <p>No transactions found.</p>
+                </div>
+            <% } else { %>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Account Number</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% recentTransactions.forEach(t => { %>
+                                <tr>
+                                    <td><%= t.id %></td>
+                                    <td><%= t.accountNumber %></td>
+                                    <td><%= t.type %></td>
+                                    <td>₹ <%= t.amount %></td>
+                                    <td><%= t.createdAt %></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } %>
+        </section>
+    </div>
+</body>
+</html>

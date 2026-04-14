@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Bank Management System</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="login-page">
+
+<div class="auth-card fade-in-up">
+    <p class="tag">Create New Account</p>
+    <h1>Register</h1>
+    <p class="subtitle dark-text center-text">Create your account with name, email, and password</p>
+
+    <% if (typeof error !== "undefined" && error) { %>
+        <div class="error-box"><%= error %></div>
+    <% } %>
+
+    <form action="/register" method="POST" class="stack-form" onsubmit="return validateRegisterForm()">
+        <input type="text" id="registerName" name="name" placeholder="Enter Name" required>
+        <input type="email" id="registerEmail" name="email" placeholder="Enter Email" required>
+
+        <div class="password-wrap">
+            <input type="password" id="registerPassword" name="password" placeholder="Create Password" required>
+            <button type="button" class="toggle-password" onclick="togglePassword('registerPassword', this)">Show</button>
+        </div>
+
+        <div class="password-wrap">
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+            <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword', this)">Show</button>
+        </div>
+
+        <div class="strength-bar">
+            <div id="strengthFill"></div>
+        </div>
+        <p id="strengthText" class="form-msg"></p>
+        <p id="registerMsg" class="form-msg"></p>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <div class="login-hint">
+        <p>Already have an account?</p>
+        <a href="/login">Login</a>
+    </div>
+</div>
+
+<script>
+function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (input.type === "password") {
+        input.type = "text";
+        btn.textContent = "Hide";
+    } else {
+        input.type = "password";
+        btn.textContent = "Show";
+    }
+}
+
+const passwordInput = document.getElementById("registerPassword");
+const strengthFill = document.getElementById("strengthFill");
+const strengthText = document.getElementById("strengthText");
+
+passwordInput.addEventListener("input", function () {
+    const value = passwordInput.value;
+    let score = 0;
+
+    if (value.length >= 4) score++;
+    if (value.length >= 6) score++;
+    if (/[A-Z]/.test(value) || /[a-z]/.test(value)) score++;
+    if (/[0-9]/.test(value)) score++;
+    if (/[^A-Za-z0-9]/.test(value)) score++;
+
+    let width = "0%";
+    let text = "";
+    let cls = "";
+
+    if (score <= 1) {
+        width = "20%";
+        text = "Weak password";
+        cls = "weak";
+    } else if (score <= 3) {
+        width = "60%";
+        text = "Medium password";
+        cls = "medium";
+    } else {
+        width = "100%";
+        text = "Strong password";
+        cls = "strong";
+    }
+
+    strengthFill.style.width = width;
+    strengthFill.className = cls;
+    strengthText.textContent = value ? text : "";
+    strengthText.className = "form-msg " + cls + "-text";
+});
+
+function validateRegisterForm() {
+    const name = document.getElementById("registerName").value.trim();
+    const email = document.getElementById("registerEmail").value.trim();
+    const password = document.getElementById("registerPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const msg = document.getElementById("registerMsg");
+
+    msg.textContent = "";
+    msg.className = "form-msg";
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (name.length < 2) {
+        msg.textContent = "Please enter a valid name.";
+        msg.classList.add("error-text");
+        return false;
+    }
+
+    if (!emailPattern.test(email)) {
+        msg.textContent = "Please enter a valid email address.";
+        msg.classList.add("error-text");
+        return false;
+    }
+
+    if (password.length < 4) {
+        msg.textContent = "Password must be at least 4 characters.";
+        msg.classList.add("error-text");
+        return false;
+    }
+
+    if (password !== confirmPassword) {
+        msg.textContent = "Password and confirm password do not match.";
+        msg.classList.add("error-text");
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+</body>
+</html>

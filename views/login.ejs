@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Bank Management System</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="login-page">
+
+<div class="auth-card fade-in-up">
+    <p class="tag">Secure Login</p>
+    <h1>Bank Management System</h1>
+    <p class="subtitle dark-text center-text">Login with your email and password</p>
+
+    <% if (typeof error !== "undefined" && error) { %>
+        <div class="error-box"><%= error %></div>
+    <% } %>
+
+    <form action="/login" method="POST" class="stack-form" onsubmit="return validateLoginForm()">
+        <input type="email" id="loginEmail" name="email" placeholder="Enter Email" required>
+
+        <div class="password-wrap">
+            <input type="password" id="loginPassword" name="password" placeholder="Enter Password" required>
+            <button type="button" class="toggle-password" onclick="togglePassword('loginPassword', this)">Show</button>
+        </div>
+
+        <p id="loginMsg" class="form-msg"></p>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="login-hint">
+        <p>New user?</p>
+        <a href="/register">Create Account</a>
+    </div>
+</div>
+
+<script>
+function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (input.type === "password") {
+        input.type = "text";
+        btn.textContent = "Hide";
+    } else {
+        input.type = "password";
+        btn.textContent = "Show";
+    }
+}
+
+function validateLoginForm() {
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+    const msg = document.getElementById("loginMsg");
+
+    msg.textContent = "";
+    msg.className = "form-msg";
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+        msg.textContent = "Please enter a valid email address.";
+        msg.classList.add("error-text");
+        return false;
+    }
+
+    if (password.length < 4) {
+        msg.textContent = "Password must be at least 4 characters.";
+        msg.classList.add("error-text");
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+</body>
+</html>
